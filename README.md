@@ -12,35 +12,8 @@ cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
 # test installation
 kubectl get all --all-namespaces
 
-#install meltallb
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.8/config/manifests/metallb-native.yaml
-
-# test metllb installtion
-kubectl get pods -n metallb-system
-NAME                          READY   STATUS    RESTARTS   AGE
-controller-6dd967fdc7-6g2jq   1/1     Running   0          5m48s
-speaker-7lqt2                 1/1     Running   0          5m48s
-
-# apply adress pool
-kubectl apply -f metallb/IPAddressPool.yaml
-ipaddresspool.metallb.io/demo-pool created
-
-# test adress pool
-kubectl get IPAddressPool -A
-NAMESPACE        NAME         AUTO ASSIGN   AVOID BUGGY IPS   ADDRESSES
-metallb-system   first-pool   true          false             ["152.53.46.232/32"]
-
-# apply layer 2 config
-kubectl apply -f metallb/L2Advertisement.yaml
-l2advertisement.metallb.io/demo created
-
-# test layer 2 config
-kubectl apply -f metallb/L2Advertisement.yaml
-l2advertisement.metallb.io/demo created
-
-kubectl get L2Advertisement -A
-NAMESPACE        NAME   IPADDRESSPOOLS   IPADDRESSPOOL SELECTORS   INTERFACES
-metallb-system   demo   ["demo-pool"]
+# install ingress controller
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
 
 
 # test loadbalancer 
@@ -97,81 +70,9 @@ certificate.cert-manager.io/letsencrypt-prod-cert created
 
 # test certificate
 kubectl describe certificate  letsencrypt-prod-cert -n default
-Name:         letsencrypt-prod-cert
-Namespace:    default
-Labels:       <none>
-Annotations:  <none>
-API Version:  cert-manager.io/v1
-Kind:         Certificate
-Metadata:
-Creation Timestamp:  2024-12-05T10:33:29Z
-Generation:          1
-Resource Version:    1110
-UID:                 67e2a03e-649e-4c43-a979-32b8dd642873
-Spec:
-Dns Names:
-nc.sbb.org
-Issuer Ref:
-Kind:       ClusterIssuer
-Name:       letsencrypt-prod
-Secret Name:  letsencrypt-prod-secret
-Status:
-Conditions:
-Last Transition Time:        2024-12-05T10:33:29Z
-Message:                     Issuing certificate as Secret does not exist
-Observed Generation:         1
-Reason:                      DoesNotExist
-Status:                      True
-Type:                        Issuing
-Last Transition Time:        2024-12-05T10:33:29Z
-Message:                     Issuing certificate as Secret does not exist
-Observed Generation:         1
-Reason:                      DoesNotExist
-Status:                      False
-Type:                        Ready
-Next Private Key Secret Name:  letsencrypt-prod-cert-tjwpx
-Events:
-Type    Reason     Age   From                                       Message
-  ----    ------     ----  ----                                       -------
-Normal  Issuing    2m1s  cert-manager-certificates-trigger          Issuing certificate as Secret does not exist
-Normal  Generated  2m1s  cert-manager-certificates-key-manager      Stored new private key in temporary Secret resource "letsencrypt-prod-cert-tjwpx"
-Normal  Requested  2m1s  cert-manager-certificates-request-manager  Created new CertificateRequest resource "letsencrypt-prod-cert-1"
 
-# create new https ingress 
-kubectl create namespace nginx-ingress
-namespace/nginx-ingress created
 
-kubectl apply -f test/nginx-https.yaml -n nginx-ingress
+# create new https resources 
+
+kubectl apply -f test/nginx-https.yaml
 ingress.networking.k8s.io/nginx-https created
-
-
-# test
-kubectl get ingress -A
-NAMESPACE   NAME                        CLASS    HOSTS        ADDRESS   PORTS     AGE
-default     cm-acme-http-solver-7kwlx   <none>   nc.sbb.org             80        102m
-default     nginx-https                 <none>   nc.sbb.org             80, 443   88m
-
-
-kubectl describe ingress nginx-https
-Name:             nginx-https
-Labels:           <none>
-Namespace:        default
-Address:
-Ingress Class:    <none>
-Default backend:  <default>
-TLS:
-letsencrypt-prod-secret terminates nc.sbb.org
-Rules:
-Host        Path  Backends
-  ----        ----  --------
-nc.sbb.org
-/   nginx-service:80 (10.42.0.7:80)
-Annotations:  cert-manager.io/cluster-issuer: letsencrypt-prod
-kubernetes.io/ingress.class: nginx-ingress
-nginx.ingress.kubernetes.io/force-ssl-redirect: true
-nginx.ingress.kubernetes.io/rewrite-target: /
-spec.ingressClassName: nginx
-Events:
-Type    Reason             Age    From                       Message
-  ----    ------             ----   ----                       -------
-Normal  CreateCertificate  5m42s  cert-manager-ingress-shim  Successfully created Certificate "letsencrypt-prod-secret"
