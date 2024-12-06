@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: nextcloud
-          image: nextcloud/all-in-one:latest
+          image: nextcloud
           ports:
             - containerPort: 80
               name: nextcloud
@@ -22,17 +22,21 @@ spec:
             - name: nextcloud-data
               mountPath: /var/www/html
           env:
-            - name: NEXTCLOUD_DB_HOST
+            - name: MYSQL_HOST
               value: nextcloud-mysql-service.default.svc.cluster.local
-            - name: NEXTCLOUD_DB_PASSWORD
+            - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: nextcloud-mysql-secret
                   key: MARIADB_ROOT_PASSWORD
-            - name: NEXTCLOUD_DB_USER
+            - name: MYSQL_USER
               value: root
-            - name: NEXTCLOUD_DB_NAME
+            - name: MYSQL_DATABASE
               value: nextcloud-mysql
+            - name: NEXTCLOUD_ADMIN_USER
+              value: alex
+            - name: NEXTCLOUD_ADMIN_PASSWORD
+              value: SuperSecret
       volumes:
         - name: nextcloud-data
           persistentVolumeClaim:
@@ -90,11 +94,10 @@ metadata:
     spec.ingressClassName: nextcloud
     cert-manager.io/cluster-issuer: letsencrypt-prod # must match cert/clusterissuer.yaml metadata.name
     nginx.ingress.kubernetes.io/rewrite-target: /
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 spec:
   ingressClassName: nextcloud
   rules:
-    - host: www.sbb.org
+    - host: nc.sbb.org
       http:
         paths:
           - path: /
@@ -106,7 +109,7 @@ spec:
                   number: 80
   tls:
     - hosts:
-        - www.sbb.org
+        - nc.sbb.org
       secretName: letsencrypt-prod-secret
 
 ---

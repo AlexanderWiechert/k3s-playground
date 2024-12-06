@@ -3,9 +3,11 @@
 ## standard installation
 curl -sfL https://get.k3s.io | sh -
 
-#disable traefik
+## disable traefik
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable traefik" sh
 
+### cleanup
+/usr/local/bin/k3s-uninstall.sh
 
 cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
 

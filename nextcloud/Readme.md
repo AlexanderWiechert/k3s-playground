@@ -6,7 +6,7 @@ kubectl create namespace cert-manager
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.1/cert-manager.yaml
 
 # install all
-kubectl apply -f wordpress
+kubectl apply -f nextcloud
 
 # cleanup
-kubectl delete -f wordpress
+kubectl delete -f nextcloud
