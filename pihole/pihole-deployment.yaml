@@ -49,7 +49,7 @@ spec:
     - host: pi.sbb.org
       http:
         paths:
-          - path: /admin/
+          - path: /
             pathType: Prefix
             backend:
               service:
