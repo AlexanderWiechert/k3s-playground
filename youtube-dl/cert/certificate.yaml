@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: letsencrypt-youtube-dl
+  namespace: default
+spec:
+  secretName: letsencrypt-youtube-dl
+  dnsNames:
+    - pi.sbb.org
+  issuerRef:
+    name: letsencrypt-youtube-dl
+    kind: ClusterIssuer

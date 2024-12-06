@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: youtube-dl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: youtube-dl
+  template:
+    metadata:
+      labels:
+        app: youtube-dl
+    spec:
+      containers:
+        - name: youtube-dl
+          image: youtube-dl
+          ports:
+            - containerPort: 80
+              name: youtube-dl
+#          env:
+#            - name: WEBPASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  name: youtube-dl-admin
+#                  key: WEBPASSWORD
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: youtube-dl-service
+spec:
+  type: ClusterIP
+  selector:
+    app: youtube-dl
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: youtube-dl
+  annotations:
+    spec.ingressClassName: youtube-dl
+    cert-manager.io/cluster-issuer: letsencrypt-youtube-dl # must match cert/clusterissuer.yaml metadata.name
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: youtube-dl
+  rules:
+    - host: pi.sbb.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name:  youtube-dl-service
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - pi.sbb.org
+      secretName: letsencrypt-youtube-dl
+
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: youtube-dl
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+spec:
+  controller: k8s.io/ingress-nginx
