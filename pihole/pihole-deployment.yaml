@@ -75,7 +75,7 @@ metadata:
   name: pihole
   annotations:
     spec.ingressClassName: pihole
-    cert-manager.io/cluster-issuer: letsencrypt-prod # must match cert/clusterissuer.yaml metadata.name
+    cert-manager.io/cluster-issuer: letsencrypt-pihole # must match cert/clusterissuer.yaml metadata.name
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: pihole
@@ -93,7 +93,7 @@ spec:
   tls:
     - hosts:
         - pi.sbb.org
-      secretName: letsencrypt-prod-secret
+      secretName: letsencrypt-pihole-secret
 
 ---
 apiVersion: networking.k8s.io/v1

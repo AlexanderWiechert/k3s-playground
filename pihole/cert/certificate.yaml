@@ -1,12 +1,12 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: letsencrypt-prod-cert
+  name: letsencrypt-pihole-cert
   namespace: default
 spec:
-  secretName: letsencrypt-prod-secret
+  secretName: letsencrypt-pihole-secret
   dnsNames:
     - pi.sbb.org
   issuerRef:
-    name: letsencrypt-prod
+    name: letsencrypt-pihole
     kind: ClusterIssuer
