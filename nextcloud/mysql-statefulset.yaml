@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nextcloud-mysql
+  labels:
+    app: nextcloud-mysql
+spec:
+  replicas: 1
+  serviceName: nextcloud-mysql
+  selector:
+    matchLabels:
+      app: nextcloud-mysql
+  template:
+    metadata:
+      labels:
+        app: nextcloud-mysql
+    spec:
+      containers:
+        - name: database
+          image: mariadb
+          args:
+            - "--ignore-db-dir=lost+found"
+          env:
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: nextcloud-mysql-secret
+                  key: MARIADB_ROOT_PASSWORD
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: nextcloud-mysql-data
+              mountPath: /var/lib/nextcloud-mysql
+      volumes:
+        - name: nextcloud-mysql-data
+          persistentVolumeClaim:
+            claimName: nextcloud-mysql-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud-mysql-service
+spec:
+  ports:
+    - port: 3306
+      protocol: TCP
+  selector:
+    app: nextcloud-mysql
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nextcloud-mysql-secret
+type: Opaque
+data:
+  MARIADB_ROOT_PASSWORD: U3VwZXJTZWNyZXQK
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nextcloud-mysql-pv
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /mnt/data/nextcloud-mysql
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nextcloud-mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: local-path
