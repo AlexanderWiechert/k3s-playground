@@ -22,7 +22,7 @@ spec:
             - name: WEBPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: wordpress-mysql-secret
+                  name: pihole-admin
                   key: WEBPASSWORD
 ---
 apiVersion: v1
