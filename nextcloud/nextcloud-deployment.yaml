@@ -63,7 +63,7 @@ metadata:
   name: nextcloud-pv
 spec:
   capacity:
-    storage: 10Gi
+    storage: 200Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
@@ -81,7 +81,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 10Gi
   storageClassName: manual
 
 ---
