@@ -20,12 +20,18 @@ spec:
               name: pihole
           env:
             - name: WEBPASSWORD
-              value: SuperSecret
-#            - name: WORDPRESS_DB_PASSWORD
-#              valueFrom:
-#                secretKeyRef:
-#                  name: wordpress-mysql-secret
-#                  key: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: wordpress-mysql-secret
+                  key: WEBPASSWORD
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+type: Opaque
+data:
+  WEBPASSWORD: U3VwZXJTZWNyZXQK
 
 ---
 kind: Service
