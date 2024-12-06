@@ -18,6 +18,14 @@ spec:
           ports:
             - containerPort: 80
               name: pihole
+          env:
+            - name: WEBPASSWORD
+              value: SuperSecret
+#            - name: WORDPRESS_DB_PASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  name: wordpress-mysql-secret
+#                  key: MARIADB_ROOT_PASSWORD
 
 ---
 kind: Service
