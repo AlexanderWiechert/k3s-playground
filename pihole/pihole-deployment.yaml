@@ -76,3 +76,12 @@ metadata:
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
   controller: k8s.io/ingress-nginx
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pihole-admin
+type: Opaque
+data:
+  WEBPASSWORD: U3VwZXJTZWNyZXQK
