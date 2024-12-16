@@ -6,7 +6,7 @@ metadata:
 spec:
   secretName: letsencrypt-youtube-dl
   dnsNames:
-    - pi.sbb.org
+    - yt.sbb.org
   issuerRef:
     name: letsencrypt-youtube-dl
     kind: ClusterIssuer
