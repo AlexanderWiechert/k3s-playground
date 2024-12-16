@@ -1,14 +1,14 @@
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt-youtube-dl
+  name: letsencrypt-youtubedl
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
     email: wiechert@fachadmin.de
     privateKeySecretRef:
-      name: letsencrypt-youtube-dl
+      name: letsencrypt-youtubedl
     solvers:
       - http01:
           ingress:
-            class: youtube-dl # muss spec.ingressClassName entsprechen
+            class: youtubedl # muss spec.ingressClassName entsprechen

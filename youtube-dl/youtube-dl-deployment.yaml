@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: youtube-dl
+  name: youtubedl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: youtube-dl
+      app: youtubedl
   template:
     metadata:
       labels:
-        app: youtube-dl
+        app: youtubedl
     spec:
       containers:
         - name: youtube-dl
           image: kmb32123/youtube-dl-server
           ports:
-            - containerPort: 80
-              name: youtube-dl
+            - containerPort: 8080
+              name: youtubedl
 #          env:
 #            - name: WEBPASSWORD
 #              valueFrom:
@@ -28,11 +28,11 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: youtube-dl-service
+  name: youtubedl-service
 spec:
   type: ClusterIP
   selector:
-    app: youtube-dl
+    app: youtubedl
   ports:
     - name: http
       protocol: TCP
@@ -43,13 +43,13 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: youtube-dl
+  name: youtubedl
   annotations:
-    spec.ingressClassName: youtube-dl
-    cert-manager.io/cluster-issuer: letsencrypt-youtube-dl # must match cert/clusterissuer.yaml metadata.name
+    spec.ingressClassName: youtubedl
+    cert-manager.io/cluster-issuer: letsencrypt-youtubedl # must match cert/clusterissuer.yaml metadata.name
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: youtube-dl
+  ingressClassName: youtubedl
   rules:
     - host: yt.sbb.org
       http:
@@ -58,9 +58,9 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name:  youtube-dl-service
+                name:  youtubedl-service
                 port:
-                  number: 80
+                  number: 8080
   tls:
     - hosts:
         - yt.sbb.org
@@ -70,7 +70,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: IngressClass
 metadata:
-  name: youtube-dl
+  name: youtubedl
   annotations:
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
