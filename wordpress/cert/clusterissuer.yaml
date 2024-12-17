@@ -11,4 +11,4 @@ spec:
     solvers:
       - http01:
           ingress:
-            class: wordpress # muss spec.ingressClassName entsprechen
+            class: nginx # muss spec.ingressClassName entsprechen

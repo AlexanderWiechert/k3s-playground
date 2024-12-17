@@ -5,10 +5,10 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main
 kubectl create namespace cert-manager
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.1/cert-manager.yaml
 # install certs
-kubectl apply -f cert
+kubectl apply -f pihole/cert
 
 # install all
-kubectl apply -f .
+kubectl apply -f pihole
 
 # cleanup
 kubectl delete -f .

@@ -86,12 +86,10 @@ kind: Ingress
 metadata:
   name: wordpress
   annotations:
-    spec.ingressClassName: wordpress
     cert-manager.io/cluster-issuer: letsencrypt-prod # must match cert/clusterissuer.yaml metadata.name
     nginx.ingress.kubernetes.io/rewrite-target: /
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 spec:
-  ingressClassName: wordpress
+  ingressClassName: nginx
   rules:
     - host: www.sbb.org
       http:
@@ -107,13 +105,3 @@ spec:
     - hosts:
         - www.sbb.org
       secretName: letsencrypt-prod-secret
-
----
-apiVersion: networking.k8s.io/v1
-kind: IngressClass
-metadata:
-  name: wordpress
-  annotations:
-    ingressclass.kubernetes.io/is-default-class: "true"
-spec:
-  controller: k8s.io/ingress-nginx

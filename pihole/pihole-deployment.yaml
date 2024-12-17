@@ -46,7 +46,6 @@ kind: Ingress
 metadata:
   name: pihole
   annotations:
-    spec.ingressClassName: pihole
     cert-manager.io/cluster-issuer: letsencrypt-pihole # must match cert/clusterissuer.yaml metadata.name
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:

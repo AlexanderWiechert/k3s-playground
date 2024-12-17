@@ -90,11 +90,10 @@ kind: Ingress
 metadata:
   name: nextcloud
   annotations:
-    spec.ingressClassName: nextcloud
     cert-manager.io/cluster-issuer: letsencrypt-prod # must match cert/clusterissuer.yaml metadata.name
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: nextcloud
+  ingressClassName: nginx
   rules:
     - host: nc.sbb.org
       http:
@@ -111,12 +110,3 @@ spec:
         - nc.sbb.org
       secretName: letsencrypt-prod-secret
 
----
-apiVersion: networking.k8s.io/v1
-kind: IngressClass
-metadata:
-  name: nextcloud
-  annotations:
-    ingressclass.kubernetes.io/is-default-class: "true"
-spec:
-  controller: k8s.io/ingress-nginx
