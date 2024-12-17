@@ -28,13 +28,13 @@ spec:
                   key: MARIADB_ROOT_PASSWORD
           ports:
             - containerPort: 3306
-          volumeMounts:
-            - name: mysql-data
-              mountPath: /var/lib/mysql
-      volumes:
-        - name: mysql-data
-          persistentVolumeClaim:
-            claimName: wordpress-mysql-pvc
+#          volumeMounts:
+#            - name: mysql-data
+#              mountPath: /var/lib/mysql
+#      volumes:
+#        - name: mysql-data
+#          persistentVolumeClaim:
+#            claimName: wordpress-mysql-pvc
 
 ---
 apiVersion: v1
