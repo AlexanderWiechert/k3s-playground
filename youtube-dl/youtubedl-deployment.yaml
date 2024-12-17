@@ -43,9 +43,9 @@ metadata:
   annotations:
     spec.ingressClassName: youtubedl
     cert-manager.io/cluster-issuer: letsencrypt-youtubedl # must match cert/clusterissuer.yaml metadata.name
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /youtube-dl
 spec:
-  ingressClassName: youtubedl
+  ingressClassName: nginx
   rules:
     - host: yt.sbb.org
       http:
