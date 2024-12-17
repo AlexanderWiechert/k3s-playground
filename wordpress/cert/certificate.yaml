@@ -1,12 +1,12 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: letsencrypt-prod-cert
+  name: letsencrypt-wordpress
   namespace: default
 spec:
-  secretName: letsencrypt-prod-secret
+  secretName: letsencrypt-wordpress
   dnsNames:
     - www.sbb.org
   issuerRef:
-    name: letsencrypt-prod
+    name: letsencrypt-wordpress
     kind: ClusterIssuer

@@ -86,7 +86,7 @@ kind: Ingress
 metadata:
   name: wordpress
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod # must match cert/clusterissuer.yaml metadata.name
+    cert-manager.io/cluster-issuer: letsencrypt-wordpress # must match cert/clusterissuer.yaml metadata.name
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
@@ -104,4 +104,4 @@ spec:
   tls:
     - hosts:
         - www.sbb.org
-      secretName: letsencrypt-prod-secret
+      secretName: letsencrypt-wordpress
