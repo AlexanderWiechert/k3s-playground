@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: youtubedl
-          image: youtubedl/youtubedl
+          image: kmb32123/youtube-dl-server
           ports:
             - containerPort: 8080
               name: youtubedl
