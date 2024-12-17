@@ -41,7 +41,7 @@ metadata:
   name: youtubedl
   annotations:
     spec.ingressClassName: youtubedl
-    cert-manager.io/cluster-issuer: letsencrypt-youtubedl # must match cert/clusterissuer.yaml metadata.name
+    #cert-manager.io/cluster-issuer: letsencrypt-youtubedl # must match cert/clusterissuer.yaml metadata.name
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: youtubedl
@@ -56,10 +56,10 @@ spec:
                 name:  youtubedl-service
                 port:
                   number: 8080
-  tls:
-    - hosts:
-        - yt.sbb.org
-      secretName: letsencrypt-youtubedl
+#  tls:
+#    - hosts:
+#        - yt.sbb.org
+#      secretName: letsencrypt-youtubedl
 
 ---
 apiVersion: networking.k8s.io/v1
