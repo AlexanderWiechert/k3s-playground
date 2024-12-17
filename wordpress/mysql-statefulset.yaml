@@ -63,21 +63,22 @@ data:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mysql-pv
+  name: wordpress-mysql-pv
 spec:
   capacity:
     storage: 10Gi
   accessModes:
     - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
   hostPath:
-    path: /mnt/data/mysql
+    path: /srv/data/mysql
 
 ---
 
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pvc
+  name: wordpress-mysql-pvc
 spec:
   accessModes:
     - ReadWriteOnce
