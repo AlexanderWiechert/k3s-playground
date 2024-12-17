@@ -18,12 +18,7 @@ spec:
           ports:
             - containerPort: 8080
               name: youtubedl
-          env:
-            - name: WEBPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: youtubedl-admin
-                  key: WEBPASSWORD
+
 
 ---
 kind: Service
