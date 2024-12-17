@@ -50,7 +50,7 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-youtubedl # must match cert/clusterissuer.yaml metadata.name
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: nginx
+  ingressClassName: youtubedl
   rules:
     - host: yt.sbb.org
       http:
