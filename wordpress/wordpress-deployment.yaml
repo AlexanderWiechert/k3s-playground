@@ -65,7 +65,7 @@ spec:
   persistentVolumeReclaimPolicy: Delete
   storageClassName: manual
   hostPath:
-    path: /srv/data
+    path: /srv/data/wordpress
 
 ---
 apiVersion: v1
