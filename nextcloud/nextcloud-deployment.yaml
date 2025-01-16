@@ -21,6 +21,8 @@ spec:
           volumeMounts:
             - name: nextcloud-data
               mountPath: /var/www/html
+            - name: backup-volume
+              mountPath: /backup  # Ba
           env:
             - name: MYSQL_HOST
               value: nextcloud-mysql-service.default.svc.cluster.local
@@ -41,6 +43,10 @@ spec:
         - name: nextcloud-data
           persistentVolumeClaim:
             claimName: nextcloud-pvc
+        - name: backup-volume
+          hostPath:
+            path: /home/awiechert/backup/nextcloud/alex  # Pfad auf der Node
+            type: DirectoryOrCreate
 ---
 kind: Service
 apiVersion: v1
