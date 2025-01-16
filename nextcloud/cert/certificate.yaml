@@ -5,8 +5,11 @@ metadata:
   namespace: default
 spec:
   secretName: letsencrypt-prod-secret
-  dnsNames:
-    - nc.sbb.org
+  duration: 8760h # 365 Tage
+  renewBefore: 360h # 15 Tage vor Ablauf erneuern
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
+  commonName: nc.sbb.org
+  dnsNames:
+    - nc.sbb.org
