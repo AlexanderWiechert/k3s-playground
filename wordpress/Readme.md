@@ -7,6 +7,10 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/
 
 # install all
 kubectl apply -f wordpress
+kubectl apply -f wordpress/ert
+
 
 # cleanup
 kubectl delete -f wordpress
+
+#debug mysql mariadb-client-core-10.5
