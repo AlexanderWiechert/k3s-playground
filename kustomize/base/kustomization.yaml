@@ -1,2 +1,5 @@
 resources:
   - coredns.yaml
+  - external-dns.yaml
+  - cert-manager.yaml
+  - local-path-storage.yaml

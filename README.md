@@ -6,6 +6,9 @@ curl -sfL https://get.k3s.io | sh -
 ## disable traefik
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable traefik" sh
 
+## with vpn 
+curl -sfL https://get.k3s.io |INSTALL_K3S_EXEC="server --disable traefik"  sh -s - server --node-ip=192.168.6.1 --bind-address=192.168.6.1 --advertise-address=192.168.6.1 --tls-san=192.168.6.1
+
 ### cleanup
 /usr/local/bin/k3s-uninstall.sh
 
@@ -78,3 +81,19 @@ kubectl describe certificate  letsencrypt-prod-cert -n default
 
 kubectl apply -f test/nginx-https.yaml
 ingress.networking.k8s.io/nginx-https created
+
+
+# use wireguard connection 
+sudo curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable traefik --flannel-iface=wg0" sh
+
+sudo curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server="https://192.168.6.1:6443"--token=K10e0dc69ba6b9d2c987e6158d3ad77da26d2381ec29d8611f6faceec70944c3228::server:9e62e8c943957b830e1717a16d72480a --flannel-iface=wg0"
+
+
+# use external iface
+export k3s_token="K1012afbe6650bba384f32ed756c66a7ffc980f6fc741ecd3dbecabc2471d5d350c::server:5a9325e68f1ff55abbe76eaa23e38baf"
+export k3s_url="https://152.53.46.232:6443"
+curl -sfL https://get.k3s.io | K3S_URL=${k3s_url} K3S_TOKEN=${k3s_token} sh -
+
+
+ExecStart=/usr/local/bin/k3s \
+agent --server=https://192.168.6.1:6443 --token=K10e0dc69ba6b9d2c987e6158d3ad77da26d2381ec29d8611f6faceec70944c3228::server:9e62e8c943957b830e1717a16d72480a --flannel-iface=wg0\

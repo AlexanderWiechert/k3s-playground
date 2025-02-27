@@ -1,0 +1,6 @@
+resources:
+  - nextcloud-deployment.yaml
+  - mysql-statefulset.yaml
+  - redis-deployment.yaml
+  - cert/certificate.yaml
+  - cert/clusterissuer.yaml

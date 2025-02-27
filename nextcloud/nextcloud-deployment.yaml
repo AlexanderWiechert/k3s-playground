@@ -15,6 +15,9 @@ spec:
       containers:
         - name: nextcloud
           image: nextcloud
+#          securityContext:
+#            runAsUser: 1000    # UID des Verzeichnisses
+#            runAsGroup: 1000   # GID des Verzeichnisses
           ports:
             - containerPort: 80
               name: nextcloud
@@ -22,7 +25,7 @@ spec:
             - name: nextcloud-data
               mountPath: /var/www/html
             - name: backup-volume
-              mountPath: /backup  # Ba
+              mountPath: /backup
           env:
             - name: MYSQL_HOST
               value: nextcloud-mysql-service.default.svc.cluster.local
@@ -39,6 +42,15 @@ spec:
               value: alex
             - name: NEXTCLOUD_ADMIN_PASSWORD
               value: SuperSecret
+            - name: REDIS_HOST
+              value: redis.default.svc.cluster.local
+            - name: REDIS_PORT
+              value: "6379"
+            - name: PHP_MEMORY_LIMIT
+              value: 512M
+            - name: PHP_UPLOAD_LIMIT
+              value: 512M
+
       volumes:
         - name: nextcloud-data
           persistentVolumeClaim:
@@ -46,7 +58,7 @@ spec:
         - name: backup-volume
           hostPath:
             path: /home/awiechert/backup/nextcloud/alex  # Pfad auf der Node
-            type: DirectoryOrCreate
+            type: Directory
 ---
 kind: Service
 apiVersion: v1
@@ -96,8 +108,14 @@ kind: Ingress
 metadata:
   name: nextcloud
   annotations:
+    nginx.ingress.kubernetes.io/hsts: "true"
+    nginx.ingress.kubernetes.io/hsts-max-age: "15552000" # 6 Monate
+    nginx.ingress.kubernetes.io/hsts-include-subdomains: "true"
+    nginx.ingress.kubernetes.io/hsts-preload: "true"
+    nginx.ingress.kubernetes.io/proxy-set-headers: "nextcloud-headers"
     cert-manager.io/cluster-issuer: letsencrypt-prod # must match cert/clusterissuer.yaml metadata.name
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "512m"
 spec:
   ingressClassName: nginx
   rules:
@@ -116,3 +134,13 @@ spec:
         - nc.sbb.org
       secretName: letsencrypt-prod-secret
 
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nextcloud-headers
+  namespace: default
+data:
+  X-Forwarded-For: $proxy_add_x_forwarded_for
+  X-Real-IP: $remote_addr
+  X-Forwarded-Proto: $scheme
