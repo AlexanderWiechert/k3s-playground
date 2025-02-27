@@ -1,18 +1,4 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
+apiVersion: v1
+kind: Namespace
 metadata:
   name: ingress-nginx
-  namespace: argo-cd
-spec:
-  project: default
-  source:
-    repoURL: https://github.com/kubernetes/ingress-nginx.git
-    targetRevision: main
-    path: deploy/static/provider/cloud
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: ingress-nginx
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
